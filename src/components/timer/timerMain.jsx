@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TimerDisplay from "./TimerDisplay";
 import formatTime from "./timeFormatter";
 
@@ -8,6 +8,7 @@ const Timer = () => {
     const [inputValue, setInputValue] = useState(""); // User input time
     const [timerState, setTimerState] = useState(false); // Timer running state
     const [timerStateDisplay, setTimerStateDisplay] = useState("Start"); // Display text for start/stop button
+    const [alertTimer, setAlertTimer] = useState(""); // Alert timer state
 
     const trackButton = timerState ? "stop-button" : "start-button"; // Class for start/stop button
 
@@ -22,9 +23,11 @@ const Timer = () => {
         }
     };
 
+    const alarmAudio = useRef(new Audio('/alarm.mp3'));
+    
     useEffect(() => {
         // If timer State is true, decrement timer every second
-        if (!timerState || timer <= 0) return;
+        if (!timerState || timer < 0) return;
         
         const interval = setInterval(() => {
             setTimer(prevTime => {
@@ -32,7 +35,8 @@ const Timer = () => {
                 if (prevTime <= 0) {
                     clearInterval(interval);
                     setTimerState(false);
-                    alert("Timer Finished");
+                    alarmAudio.current.play();
+                    setAlertTimer("Timer Finished!");
                     setTimerStateDisplay("Start")
                     return 1500; // Returns to 25 mins
                 }
@@ -55,6 +59,7 @@ const Timer = () => {
         
         // Check if the input value is a valid number and not negative 
         const countdown = inputValue && inputValue > 0 ? Number(inputValue) : timer;
+        setAlertTimer("");
         setTimer(countdown);
         setTimerState(true);
         
@@ -67,9 +72,12 @@ const Timer = () => {
         setTimerState(false);
         setTimerStateDisplay("Start");
         setTimer(1500);
+        setAlertTimer("");
     }
 
     return (
+        <> 
+        <h1>{alertTimer}</h1>
         <div className="timer-container"> 
             <TimerDisplay time={formatTime(timer)} />
             <input placeholder="Enter Time" type="number" value={inputValue} onChange={handleInputChange} />
@@ -78,6 +86,7 @@ const Timer = () => {
             <button className="reset-button" onClick={reset}>Reset</button>
             </div>
         </div>
+        </>
     );
 };
 
