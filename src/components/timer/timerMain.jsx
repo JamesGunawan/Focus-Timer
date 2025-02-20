@@ -77,7 +77,7 @@ const Timer = () => {
 
     return (
         <> 
-        <h1>{alertTimer}</h1>
+        <h1 className="alarm-alert">{alertTimer}</h1>
         <div className="timer-container"> 
             <TimerDisplay time={formatTime(timer)} />
             <input placeholder="Enter Time" type="number" value={inputValue} onChange={handleInputChange} />
