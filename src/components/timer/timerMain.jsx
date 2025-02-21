@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import TimerDisplay from "./TimerDisplay";
 import formatTime from "./timeFormatter";
+import DarkModeToggle from "./darkmode";
 
 
 const Timer = () => {
@@ -82,9 +83,10 @@ const Timer = () => {
             <TimerDisplay time={formatTime(timer)} />
             <input placeholder="Enter Time" type="number" value={inputValue} onChange={handleInputChange} />
             <div className="buttons">
-            <button className={trackButton} onClick={start}>{timerStateDisplay}</button>
-            <button className="reset-button" onClick={reset}>Reset</button>
+                <button className={trackButton} onClick={start}>{timerStateDisplay}</button>
+                <button className="reset-button" onClick={reset}>Reset</button>
             </div>
+            <DarkModeToggle/>
         </div>
         </>
     );
